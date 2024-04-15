@@ -1,24 +1,19 @@
 from tkinter import *
 from tkinter import ttk
 
-global frame1,label1, label2, label3, label4
-
 
 def Selec():
-    frame3 = Frame(frame1, bg="darkorchid")
-    frame3.place(x=0, rely=0.5, width=ventanaPrincipal.winfo_width(), relheight=0.15)
-    label7 = Label(frame3, text="Escoga el piso deseado", font=("Comic Sans MS", 14))
-    label7.place(relx=0.068, rely=0.1)
-    piso = ttk.Combobox(frame3, state="readonly", values=["Piso 1", "Piso 2", "Piso 3"])
-    piso.place(relx=0.095, rely=0.5)
-    label8 = Label(frame1, text="Ingrese la placa del vehiculo", font=("Comic Sans MS", 14))
-    label8.place(relx=0.18, rely=0.66)
-    placa = Text(frame1, width=29, height=1)
-    placa.place(relx=0.2, rely=0.73)
-    label1.destroy()
-    label2.destroy()
-    label3.destroy()
-    label4.destroy()
+    frame3 = Frame(ventanaPrincipal, bg="darkorchid")
+    frame3.place(x=0, rely=0.5, relwidth=0.3, relheight=0.15)
+    label7 = Label(ventanaPrincipal, text="Escoga el piso deseado", font=("Comic Sans MS", 14))
+    label7.place(relx=0.068, rely=0.53)
+    piso = ttk.Combobox(ventanaPrincipal, state="readonly", values=["Piso 1", "Piso 2", "Piso 3"])
+    piso.place(relx=0.095, rely=0.6)
+    label8 = Label(ventanaPrincipal, text="Ingrese la placa del vehiculo", font=("Comic Sans MS", 14))
+    label8.place(relx=0.095, rely=0.66)
+    placa = Text(ventanaPrincipal, width=29, height=1)
+    placa.place(relx=0.095, rely=0.73)
+
 
 
 def Inicio():
@@ -35,7 +30,8 @@ def Inicio():
     opcion.set("")
     Radiobutton(frame1, text="Moto", variable=opcion, value="moto", command=Selec).place(x=5, rely=0.3)
     Radiobutton(frame1, text="Carro", variable=opcion, value="carro", command=Selec).place(x=5, rely=0.3 + 0.05)
-    Radiobutton(frame1, text="Movilidad Reducida", variable=opcion, value="discapacitado", command=Selec).place(x=5,rely=0.3 + 0.1)
+    Radiobutton(frame1, text="Movilidad Reducida", variable=opcion, value="discapacitado", command=Selec).place(x=5,
+                                                                                                                rely=0.3 + 0.1)
 
     # Labels
     label1 = Label(ventanaPrincipal, text="Bienvenidos a Parqueadero Popo", font=font)
@@ -62,7 +58,5 @@ ventanaPrincipal.geometry("1280x720")
 ventanaPrincipal.config(bg="Yellow green")
 ventanaPrincipal.iconbitmap("icono.ico")
 
-inicio = Button(ventanaPrincipal, text="Inicio",command=Inicio)
-inicio.place(relx=0.5, rely=0.5)
 
 ventanaPrincipal.mainloop()
