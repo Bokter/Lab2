@@ -210,7 +210,7 @@ class MainFrame(Frame):
         self.inicio2 = Button(self.master, text="Inicio2", command=self.Incio2)
         self.inicio2.place(relx=0.5, rely=0.55)
 
-        font = ("Comic Sans MS", 20, "bold")
+        font = ('Anek Devanagari Thin', 20, "bold")
         # Frames
         self.frame1 = Frame(self.master, bg="Yellow green")
         self.frame1_1 = Frame(self.master, bg="Yellow green")
@@ -220,10 +220,10 @@ class MainFrame(Frame):
         # Creacion de widgets al seleccionar un radiobutton
         self.frame3 = Frame(self.master, bg="teal")
         self.frame4 = Frame(self.master, bg="grey10")
-        self.label7 = Label(self.master, text="Escoga el piso deseado", font=("Comic Sans MS", 14))
+        self.label7 = Label(self.master, text="Escoga el piso deseado", font=("Anek Devanagari Thin", 14))
         self.piso = ttk.Combobox(self.master, state="readonly", values=["Piso 1", "Piso 2", "Piso 3"])
-        self.label8 = Label(self.master, text="Ingrese la placa\n del vehiculo", font=("Comic Sans MS", 14))
-        self.label9 = Label(self.master, text="Ingrese la hora\n de entrada", font=("Commic Sans MS", 14))
+        self.label8 = Label(self.master, text="Ingrese la placa\n del vehiculo", font=("Anek Devanagari Thin", 14))
+        self.label9 = Label(self.master, text="Ingrese la hora\n de entrada", font=("Anek Devanagari Thin", 14))
         self.placa = Text(self.master, width=15, height=1)
         self.placaBusqueda = Text(self.master, width=15, height=1)
         self.hora = Text(self.master, width=10, height=1)
@@ -235,23 +235,23 @@ class MainFrame(Frame):
         self.label4 = Label(self.master, text="3. Escoja su lugar deseado.", font=font)
         self.label5 = Label(self.frame2, text="PARQUEADERO POPO", font=font)
         self.label5_5 = Label(self.frame2_2, text="PARQUEADERO POPO", font=font)
-        self.label6 = Label(self.frame1, text="Ingrese el tipo de parqueadero\na escoger", font=("Comic Sans MS", 14))
-        self.label10 = Label(self.frame1_1, text="Escoga el piso deseado", font=("Comic Sans MS", 14))
-        self.label11 = Label(self.frame1_1, text="Buscar por\n placa", font=("Comic Sans MS", 14))
+        self.label6 = Label(self.frame1, text="Ingrese el tipo de parqueadero\na escoger", font=("Anek Devanagari Thin", 14))
+        self.label10 = Label(self.frame1_1, text="Escoga el piso deseado", font=("Anek Devanagari Thin", 14))
+        self.label11 = Label(self.frame1_1, text="Buscar por\n placa", font=("Anek Devanagari Thin", 14))
         self.label13 = Label(self.frame1_1, text="Liquidación del vehiculo", font=font)
         self.label14 = Label(self.frame1_1, text="Ingresar placa del vehiculo y hora de salida",
-                             font=("Comic Sans MS", 12))
-        self.label15 = Label(self.frame1_1, text="Placa", font=("Comic Sans MS", 16))
-        self.label16 = Label(self.frame1_1, text="Hora", font=("Comic Sans MS", 16))
+                             font=("Anek Devanagari Thin", 12))
+        self.label15 = Label(self.frame1_1, text="Placa", font=("Anek Devanagari Thin", 16))
+        self.label16 = Label(self.frame1_1, text="Hora", font=("Anek Devanagari Thin", 16))
 
         # Botones
         self.agregar = Button(self.frame1, text="Arturo Felipe", bg="green", activebackground="red",
-                              font=("Comic Sans MS", 10))
+                              font=("Anek Devanagari Thin", 10))
         self.buscar = Button(self.frame1_1, text="Buscar", bg="green", activebackground="red",
-                             font=("Comic Sans MS", 10))
-        self.liquidar = Button(self.frame1_1, text="Ok", bg="green", activebackground="red", font=("Comic Sans MS", 10),
+                             font=("Anek Devanagari Thin", 10))
+        self.liquidar = Button(self.frame1_1, text="Ok", bg="green", activebackground="red", font=("Anek Devanagari Thin", 10),
                                command=self.Liquidacion)
-        self.volver = Button(self.master, text="Volver", bg="green", activebackground="red", font=("Comic Sans Ms", 10),
+        self.volver = Button(self.master, text="Volver", bg="green", activebackground="red", font=("Anek Devanagari Thin", 10),
                              command=self.Volver)
 
         # Bloques de parqueo
