@@ -14,9 +14,7 @@ class MainFrame(Frame):
         self.config(bg="Yellow green")
         self.inicio.place(relx=0.5, rely=0.5)
         self.inicio2.place(relx=0.5, rely=0.55)
-        self.OcultarMotos()
-        self.OcultarCarros()
-        self.bloqueA.place_forget()
+        self.OcultarBloques()
         self.frame1.place_forget()
         self.frame1_1.place_forget()
         self.frame2_2.place_forget()
@@ -40,7 +38,7 @@ class MainFrame(Frame):
         self.volver.place_forget()
 
     def Liquidacion(self):
-        messagebox.showinfo(title="Liquidación", message="Monto a pagar\n si",)
+        messagebox.showinfo(title="Liquidación", message="Monto a pagar\n si", )
 
     def Incio2(self):
         self.inicio.place_forget()
@@ -69,9 +67,7 @@ class MainFrame(Frame):
         self.buscar.place(relx=0.7, rely=0.29)
         self.liquidar.place(relx=0.5, rely=0.9)
         self.volver.place(relx=0.9, rely=0.91)
-        self.MostrarCarros()
-        self.MostrarMotos()
-        self.bloqueA.place(relx=0.35, y=5, width=140, height=220)
+        self.MostrarBloques()
 
         # Lista de vehiculos
         self.label12.place(relx=0.015, rely=0.38)
@@ -80,7 +76,8 @@ class MainFrame(Frame):
         self.list.insert(0, self.titulos_lista)
         self.list.insert(1, *self.listaVehiculos)
 
-    def OcultarMotos(self):
+    def OcultarBloques(self):
+        # Motos
         self.bloqueG.place_forget()
         self.bloqueH.place_forget()
         self.bloqueI.place_forget()
@@ -88,27 +85,67 @@ class MainFrame(Frame):
         self.bloqueK.place_forget()
         self.bloqueL.place_forget()
 
-    def OcultarCarros(self):
+        # Carros
         self.bloqueB.place_forget()
         self.bloqueC.place_forget()
         self.bloqueD.place_forget()
         self.bloqueE.place_forget()
         self.bloqueF.place_forget()
 
+        # Discapacitado
+        self.bloqueA.place_forget()
+
+    def DisabledCarros(self):
+        self.bloqueB.config(bg="grey", state="disabled")
+        self.bloqueC.config(bg="grey", state="disabled")
+        self.bloqueD.config(bg="grey", state="disabled")
+        self.bloqueE.config(bg="grey", state="disabled")
+        self.bloqueF.config(bg="grey", state="disabled")
+
+    def DisabledMotos(self):
+        self.bloqueG.config(bg="grey", state="disabled")
+        self.bloqueH.config(bg="grey", state="disabled")
+        self.bloqueI.config(bg="grey", state="disabled")
+        self.bloqueJ.config(bg="grey", state="disabled")
+        self.bloqueK.config(bg="grey", state="disabled")
+        self.bloqueL.config(bg="grey", state="disabled")
+
     def MostrarCarros(self):
+        self.bloqueB.config(bg="green", state="normal")
+        self.bloqueC.config(bg="green", state="normal")
+        self.bloqueD.config(bg="green", state="normal")
+        self.bloqueE.config(bg="green", state="normal")
+        self.bloqueF.config(bg="green", state="normal")
+
+    def MostrarMotos(self):
+        self.bloqueG.config(bg="green", state="normal")
+        self.bloqueH.config(bg="green", state="normal")
+        self.bloqueI.config(bg="green", state="normal")
+        self.bloqueJ.config(bg="green", state="normal")
+        self.bloqueK.config(bg="green", state="normal")
+        self.bloqueL.config(bg="green", state="normal")
+
+    def MostrarBloques(self):
+        self.MostrarMotos()
+        self.MostrarCarros()
+        self.bloqueA.config(bg="green", state="normal")
+        # Carros
         self.bloqueB.place(relx=0.46, y=5, width=140, height=220)
         self.bloqueC.place(relx=0.57, y=5, width=140, height=220)
         self.bloqueD.place(relx=0.68, y=5, width=140, height=220)
         self.bloqueE.place(relx=0.79, y=5, width=140, height=220)
         self.bloqueF.place(relx=0.9, y=5, width=140, height=220)
 
-    def MostrarMotos(self):
+        # Motos
         self.bloqueG.place(relx=0.35, rely=0.6, width=140, height=220)
         self.bloqueH.place(relx=0.46, rely=0.6, width=140, height=220)
         self.bloqueI.place(relx=0.57, rely=0.6, width=140, height=220)
         self.bloqueJ.place(relx=0.68, rely=0.6, width=140, height=220)
         self.bloqueK.place(relx=0.79, rely=0.6, width=140, height=220)
         self.bloqueL.place(relx=0.9, rely=0.6, width=140, height=220)
+
+        # Discapacitado
+        self.bloqueA.place(relx=0.35, y=5, width=140, height=220)
 
     def Select(self):
         self.frame3.place(x=0, rely=0.5, relwidth=0.3, relheight=0.15)
@@ -122,22 +159,23 @@ class MainFrame(Frame):
         self.label2.place_forget()
         self.label3.place_forget()
         self.label4.place_forget()
+        self.MostrarBloques()
 
         match self.opcion.get():
             case "moto":
                 self.MostrarMotos()
-                self.bloqueA.place_forget()
-                self.OcultarCarros()
+                self.bloqueA.config(bg="grey", state="disabled")
+                self.DisabledCarros()
 
             case "carro":
                 self.MostrarCarros()
-                self.bloqueA.place_forget()
-                self.OcultarMotos()
+                self.bloqueA.config(bg="grey", state="disabled")
+                self.DisabledMotos()
 
             case "discapacitado":
-                self.bloqueA.place(relx=0.35, y=5, width=140, height=220)
-                self.OcultarCarros()
-                self.OcultarMotos()
+                self.bloqueA.config(bg="green", state="normal")
+                self.DisabledCarros()
+                self.DisabledMotos()
 
     def Inicio(self):
         self.inicio.place_forget()
@@ -201,7 +239,8 @@ class MainFrame(Frame):
         self.label10 = Label(self.frame1_1, text="Escoga el piso deseado", font=("Comic Sans MS", 14))
         self.label11 = Label(self.frame1_1, text="Buscar por\n placa", font=("Comic Sans MS", 14))
         self.label13 = Label(self.frame1_1, text="Liquidación del vehiculo", font=font)
-        self.label14 = Label(self.frame1_1, text="Ingresar placa del vehiculo y hora de salida", font=("Comic Sans MS", 12))
+        self.label14 = Label(self.frame1_1, text="Ingresar placa del vehiculo y hora de salida",
+                             font=("Comic Sans MS", 12))
         self.label15 = Label(self.frame1_1, text="Placa", font=("Comic Sans MS", 16))
         self.label16 = Label(self.frame1_1, text="Hora", font=("Comic Sans MS", 16))
 
@@ -231,7 +270,7 @@ class MainFrame(Frame):
 
         # Lista vehiculos
         self.label12 = LabelFrame(self.master, text="Lista de vehiculos:", width=345, height=240)
-        self.titulos_lista =("Placa    -   Lugar    -   Hora de entrada    -   Tipo vehiculo")
+        self.titulos_lista = ("Placa    -   Lugar    -   Hora de entrada    -   Tipo vehiculo")
         self.listaVehiculos = (
             "CFC-223", "WGC-678", "XCV-123", "YTR-456", "VBN-789", "CBA-012", "CAB-345", "DEF-678", "GHI-901",
             "JKL-123")
