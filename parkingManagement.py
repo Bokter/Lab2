@@ -1,18 +1,3 @@
-from Ventana import MainFrame
-from tkinter import Tk
-
-def main():
-    root = Tk()
-    root.wm_title("Parqueadero Popo")
-    root.geometry("1280x720")
-    root.resizable(False, False)
-    root.iconbitmap("icono.ico")
-    app = MainFrame(root)
-    app.mainloop()
-
-if __name__=="__main__":
-    main()
-    
 class Piso:
 
     def __init__(self, P):
@@ -29,8 +14,6 @@ class Piso:
         self.slots = []
         self.entryTime = []
         self.VType = []
-
-        # Lista de vehiculos pq toca hacer 3 listas obligatorias smh
 
         self.vehicles = []
 
@@ -58,40 +41,46 @@ class Piso:
 
       enc = False
 
+      # Si la placa del vehiculo se encuentra repetida
       for i in self.plates:
         if vehicle.getPlate() == i:
-          enc = True
+          print("Placa repetida")
+          return
 
-      if enc == False:
-        slot_available = False
-        if vehicle.getVType() == "M":  # Para motos
-            for i in self.motos:
-                if i == vehiculo.getSlot():
-                  slot_available = True
-        elif vehicle.getVType() == "C":  # Para carros
-            for i in self.carros:
-                if i == vehiculo.getSlot():
-                  slot_available = True
-        elif vehicle.getVType() == "D":  # Para discapacitados
-            for i in self.discapacitados:
-                if i == vehiculo.getSlot():
-                  slot_available = True
-        if slot_available:
-            if vehicle.getSlot() not in self.slots:
-                self.plates.append(vehicle.getPlate())
-                self.slots.append(vehicle.getSlot())
-                self.entryTime.append(vehicle.getTime())
-                self.VType.append(vehicle.getVType())
+      # Si el slot que ocupa se encuentra ya en uso
+      for i in self.slots:
+        if vehicle.getSlot() == i:
+          print("Parqueadero ya ocupado")
+          return
 
-                self.vehicles.append(vehicle)
-                print("Vehiculo añadido exitosamente.")
-            else:
-                print("Lugar ocupado. Intentando asignar a otro lugar...")
-                # Aquí podrías implementar la lógica para encontrar una ubicación de estacionamiento alternativa
-        else:
-            print("Lugar no disponible.")
+      if vehicle.getVType() == "M":  # Para motos
+          for i in self.motos:
+              if i == vehiculo.getSlot():
+                slot_available = True
+      elif vehicle.getVType() == "C":  # Para carros
+          for i in self.carros:
+              if i == vehiculo.getSlot():
+                  slot_available = True
+      elif vehicle.getVType() == "D":  # Para discapacitados
+          for i in self.discapacitados:
+              if i == vehiculo.getSlot():
+                  slot_available = True
+
+      if slot_available:
+          if vehicle.getSlot() not in self.slots:
+              self.plates.append(vehicle.getPlate())
+              self.slots.append(vehicle.getSlot())
+              self.entryTime.append(vehicle.getTime())
+              self.VType.append(vehicle.getVType())
+
+              self.vehicles.append(vehicle)
+              print("Vehiculo añadido exitosamente.")
+          else:
+              print("Lugar ocupado. Intentando asignar a otro lugar...")
+              # Aquí podrías implementar la lógica para encontrar una ubicación de estacionamiento alternativa
       else:
-        print("Placa repetida")
+          print("Lugar no disponible.")
+
 
 
     def findVehicle(self, plate): # Se busca el vehiculo en el piso
@@ -166,3 +155,6 @@ Piso_1.addVehicle(cogoyocar)
 # Piso_1.clearVehicle("ABM650","9:30")
 
 juepuchacar = Vehicle("GTZ200", "P1B1", "10:30", "C")
+Piso_1.addVehicle(juepuchacar)
+
+
