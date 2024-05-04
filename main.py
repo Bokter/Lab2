@@ -1,3 +1,18 @@
+from Ventana import MainFrame
+from tkinter import Tk
+
+def main():
+    root = Tk()
+    root.wm_title("Parqueadero Popo")
+    root.geometry("1280x720")
+    root.resizable(False, False)
+    root.iconbitmap("icono.ico")
+    app = MainFrame(root)
+    app.mainloop()
+
+if __name__=="__main__":
+    main()
+    
 class Piso:
 
     def __init__(self, P):
@@ -151,7 +166,3 @@ Piso_1.addVehicle(cogoyocar)
 # Piso_1.clearVehicle("ABM650","9:30")
 
 juepuchacar = Vehicle("GTZ200", "P1B1", "10:30", "C")
-
-
-
-
