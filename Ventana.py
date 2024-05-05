@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox, ttk
 import customtkinter
-
+import customtkinter as ctk
 
 class MainFrame(Frame):
     def __init__(self, master=None):
