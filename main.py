@@ -3,7 +3,7 @@ from tkinter import Tk
 
 def main():
     root = Tk()
-    root.wm_title("Parqueadero Popo")
+    root.wm_title("ParkEase")
     root.geometry("1280x720")
     root.resizable(False, False)
     root.iconbitmap("icono.ico")
