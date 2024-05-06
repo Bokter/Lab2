@@ -2,7 +2,6 @@ from Ventana import MainFrame
 from tkinter import Tk, messagebox
 
 plates = []
-globalVehicles = []
 
 def main():
     root = Tk()
@@ -100,37 +99,45 @@ class Piso:
               self.VType.append(vehicle.getVType())
 
               self.vehicles.append(vehicle)
-              globalVehicles.append(vehicle)
 
               return True
           else:
               return False
       else:
-          messagebox.showinfo(title="Agregar Vehiculo",
-                              message="El vehiculo no se pudo añadir\nLugar no disponible")
+          messagebox.showinfo(title="Agregar Vehiculo",message="El vehiculo no se pudo añadir\nLugar no disponible")
 
-    def findVehicle(self, plate): # Se busca el vehiculo en el piso
+    def findVehicle(self, plate,n): # Se busca el vehiculo en el piso
         for vehicle in self.vehicles:
             if vehicle.getPlate() == plate:
-                return vehicle
+                match n:
+                    case 0:
+                        return vehicle
+                    case 1:
+                        messagebox.showinfo(title="Búsqueda vehiculo", message=("Vehiculo: ", vehicle.getPlate(),"\n Lugar: ",vehicle.getSlot(), "\n Hora: ",vehicle.getTime()))
         return False
 
     def removeVehicle(self, plate):  # Con la placa eliminas el vehiculo del piso
-        i = 0
+
         for vehicle in self.vehicles:
             if vehicle.getPlate() == plate:
+
+                s = vehicle.getSlot()
+                e = vehicle.getTime()
+                t = vehicle.getVType()
+
                 self.vehicles.remove(vehicle)
-                self.slots.remove(i)
-                self.entryTime.remove(i)
-                self.VType.remove(i)
-            i += 1
+
+        self.slots.remove(s)
+        self.entryTime.remove(e)
+        self.VType.remove(t)
 
         for p in plates:
             if p == plate:
-                plate.remove(p)
+                plates.remove(p)
 
     def clearVehicle(self, plate, time):
-        vehicle = self.findVehicle(plate)
+
+        vehicle = self.findVehicle(plate,0)
         if vehicle:
             entry_time = vehicle.getTime().split(":")
             exit_time = time.split(":")
@@ -139,14 +146,19 @@ class Piso:
             duration = exit_seconds - entry_seconds
 
             if entry_seconds < exit_seconds:
-              hours_parked = duration / 3600
-              fee = hours_parked * 2000
-              self.removeVehicle(plate)
-              return fee
+                hours_parked = duration / 3600
+                fee = hours_parked * 2000
+                fee = int(fee)
+                self.removeVehicle(plate)
+
+                return messagebox.showinfo(title="Liquidacion",message=f"¡Vehiculo Encontrado!\nMonto a pagar: {fee}")
+
             else:
-              return print("Tiempo Invalido")
+                return messagebox.showerror(title="Liquidacion",message=f"Tiempo Invalido")
         else:
-            return print("Vehiculo no encontrado")
+            return messagebox.showerror(title="Liquidacion",message=f"Vehiculo no encontrado")
+
+
 
 class Vehicle:
 

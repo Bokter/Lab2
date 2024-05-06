@@ -48,9 +48,6 @@ class MainFrame(Frame):
         self.label20.place_forget()
         self.volver.place_forget()
 
-    def Liquidacion(self):
-        messagebox.showinfo(title="Liquidación", message="Monto a pagar\n si")
-
     def Administracion(self):
 
         self.val = 2
@@ -267,7 +264,7 @@ class MainFrame(Frame):
         self.label6.place(relx=0.12, rely=0.16)
         self.agregar.place(relx=0.4, rely=0.8, width=100, height=50)
 
-    def Validacion(self):
+    def Validacion(self, n):
         match self.val:
             case 1:
                 if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "":
@@ -275,10 +272,36 @@ class MainFrame(Frame):
                 else:
                     self.addVehicle(self.placa.get(1.0,"end-1c"), self.slot, self.hora.get(1.0,"end-1c"), self.opcion.get())
             case 2:
-                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "" or self.placaBusqueda.get(1.0, "end-1c") == "":
-                    messagebox.showerror(title="Advertencia", message="Completar todos los campos")
-                else:
-                    self.Liquidacion()
+
+                match n:
+                    case 1:
+                        if self.placaBusqueda.get(1.0, "end-1c") == "":
+                            messagebox.showerror(title="Advertencia", message="Completar todos los campos")
+                        else:
+                            self.Busqueda()
+                    case 2:
+                        if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "":
+                            messagebox.showerror(title="Advertencia", message="Completar todos los campos")
+                        else:
+                            self.Liquidacion(self.placa.get(1.0,"end-1c"), self.hora.get(1.0,"end-1c"))
+
+    def Busqueda(self):
+        from Main import Piso_1
+        from Main import Piso_2
+        from Main import Piso_3
+
+        self.encontrado = Piso_1.findVehicle(self.placaBusqueda.get(1.0,"end-1c"),1)
+        if self.encontrado != False:
+            return None
+        self.encontrado = Piso_2.findVehicle(self.placaBusqueda.get(1.0, "end-1c"),1)
+        if self.encontrado != False:
+            return None
+        self.encontrado = Piso_3.findVehicle(self.placaBusqueda.get(1.0, "end-1c"),1)
+        if self.encontrado != False:
+            return None
+
+        if self.encontrado == False:
+            messagebox.showerror(title="Búsqueda vehiculo", message="No se econtró el vehiculo")
 
     def create_widgets(self):
         font = ('Freeman', 38, "bold")
@@ -360,12 +383,12 @@ class MainFrame(Frame):
 
         # Botones
         self.agregar = Button(self.frame1, text="Agregar", bg="green", activebackground="red",
-                              font=("Freeman", 16), command= self.Validacion)
+                              font=("Freeman", 16), command= lambda :self.Validacion(0))
         self.buscar = Button(self.frame1_1, text="Buscar", bg="green", activebackground="red",
-                             font=("Freeman", 10), command=self.Validacion)
+                             font=("Freeman", 10), command=lambda:self.Validacion(1))
         self.liquidar = Button(self.frame1_1, text="Ok", bg="green", activebackground="red",
                                font=("Freeman", 10),
-                               command= self.Validacion)
+                               command= lambda:self.Validacion(2))
         self.volver = Button(self.master, text="Volver", bg="green", activebackground="red",
                              font=("Freeman", 10),
                              command=self.Volver)
@@ -442,6 +465,9 @@ class MainFrame(Frame):
                         if num + 1 > max - 1:
                             Piso_3.current[index] = 0
                         else:
+
+                            Piso_3.current[index] += 1
+
                             Piso_3.current[index] += 1
 
                         self.slot = f"P3{block}{num + 1}"
@@ -450,6 +476,38 @@ class MainFrame(Frame):
 
             case 2:
 
+                match (self.piso.get()):
+                    case "Piso 1":
+                        self.label17.config(text="Piso 1")
+                        self.label17.place(relx=0.66, rely=0.38)
+
+                        self.list.delete(1, tk.END)
+
+                        for i in Piso_1.vehicles:
+                            if block in i.getSlot():
+                                self.list.insert(END,f"{i.getPlate()}      -       {i.getSlot()}       -       {i.getTime()}     -       {i.getVType()}")
+
+                    case "Piso 2":
+                        self.label17.config(text="Piso 2")
+                        self.label17.place(relx=0.66, rely=0.38)
+
+                        self.list.delete(1, tk.END)
+
+                        for i in Piso_2.vehicles:
+                            if block in i.getSlot():
+                                self.list.insert(END,
+                                                 f"{i.getPlate()}      -       {i.getSlot()}       -       {i.getTime()}     -       {i.getVType()}")
+
+                    case "Piso 3":
+                        self.label17.config(text="Piso 3")
+                        self.label17.place(relx=0.66, rely=0.38)
+
+                        self.list.delete(1, tk.END)
+
+                        for i in Piso_3.vehicles:
+                            if block in i.getSlot():
+                                self.list.insert(END,
+                                                 f"{i.getPlate()}      -       {i.getSlot()}       -       {i.getTime()}     -       {i.getVType()}")
 
                 pass
 
@@ -505,3 +563,43 @@ class MainFrame(Frame):
         else:
             messagebox.showinfo(title="Datos Invalidos",
                                 message="El vehiculo no se pudo añadir\nRevise sus datos")
+
+    def Liquidacion(self, plate, time):
+
+        dv = False
+
+        from Main import plates
+
+        from Main import Piso_1
+        from Main import Piso_2
+        from Main import Piso_3
+
+        # Determinar si la placa existe
+
+        for p in plates:
+            if plate == p:
+                dv = True
+
+        if ":" in time:
+            a = time.split(":")
+            if int(a[0]) >= 0 and int(a[0]) <= 23 and int(a[1]) >= 0 and int(a[1]) <= 59:
+                dp = True
+            else:
+                messagebox.showinfo(title="Liquidacion",message="Tiempo invalido")
+                return
+
+        if dv and dp:
+            n = Piso_1.findVehicle(plate,0)
+            if n == False:
+                n = Piso_2.findVehicle(plate,0)
+                if n == False:
+                    Piso_3.clearVehicle(plate,time)
+                else:
+                    Piso_2.clearVehicle(plate,time)
+            else:
+                Piso_1.clearVehicle(plate,time)
+        else:
+            messagebox.showinfo(title="Liquidacion",message="Placa no encontrada")
+
+
+
