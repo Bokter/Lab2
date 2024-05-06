@@ -276,12 +276,35 @@ class MainFrame(Frame):
                     self.addVehicle(self.placa.get(1.0,"end-1c"), self.slot, self.hora.get(1.0,"end-1c"), self.opcion.get())
             case 2:
 
-
-                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "" or self.placaBusqueda.get(1.0, "end-1c") == "":
-
+                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "":
                     messagebox.showerror(title="Advertencia", message="Completar todos los campos")
                 else:
                     self.Liquidacion()
+
+    def ValidacionBusqueda(self):
+        if self.val==2:
+            if self.placaBusqueda.get(1.0, "end-1c") == "":
+                messagebox.showerror(title="Advertencia", message="Campo vacío")
+            else:
+                self.Busqueda()
+
+    def Busqueda(self):
+        from Main import Piso_1
+        from Main import Piso_2
+        from Main import Piso_3
+
+        self.encontrado = Piso_1.findVehicle(plate=self.placaBusqueda.get(1.0,"end-1c"))
+        if self.encontrado != False:
+            return None
+        self.encontrado = Piso_2.findVehicle(plate=self.placaBusqueda.get(1.0, "end-1c"))
+        if self.encontrado != False:
+            return None
+        self.encontrado = Piso_3.findVehicle(plate=self.placaBusqueda.get(1.0, "end-1c"))
+        if self.encontrado != False:
+            return None
+
+        if self.encontrado == False:
+            messagebox.showerror(title="Búsqueda vehiculo", message="No se econtró el vehiculo")
 
     def create_widgets(self):
         font = ('Freeman', 38, "bold")
@@ -365,7 +388,7 @@ class MainFrame(Frame):
         self.agregar = Button(self.frame1, text="Agregar", bg="green", activebackground="red",
                               font=("Freeman", 16), command= self.Validacion)
         self.buscar = Button(self.frame1_1, text="Buscar", bg="green", activebackground="red",
-                             font=("Freeman", 10), command=self.Validacion)
+                             font=("Freeman", 10), command=self.ValidacionBusqueda)
         self.liquidar = Button(self.frame1_1, text="Ok", bg="green", activebackground="red",
                                font=("Freeman", 10),
                                command= self.Validacion)
