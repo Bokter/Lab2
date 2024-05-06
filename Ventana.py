@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter import messagebox, ttk
+import tkinter as tk
 import customtkinter
 import customtkinter as ctk
+
 
 class MainFrame(Frame):
     def __init__(self, master=None):
@@ -12,10 +14,11 @@ class MainFrame(Frame):
         self.create_widgets()
 
     def Volver(self):
+        self.label18.config(image=self.fondo)
+        self.label18.place(x=0, y=0)
         self.config(bg="Yellow green")
-        self.agregarVehiculo.place(relx=0.4, rely=0.5)
-        self.administracion.place(relx=0.41, rely=0.75)
-        self.label18.place(relx=0.44, rely=0.1)
+        self.agregarVehiculo.place(relx=0.37, rely=0.5)
+        self.administracion.place(relx=0.38, rely=0.75)
         self.OcultarBloques()
         self.frame1.place_forget()
         self.frame1_1.place_forget()
@@ -41,12 +44,12 @@ class MainFrame(Frame):
         self.volver.place_forget()
 
     def Liquidacion(self):
-        messagebox.showinfo(title="Liquidación", message="Monto a pagar\n si", )
+        messagebox.showinfo(title="Liquidación", message="Monto a pagar\n si")
 
     def Administracion(self):
         self.agregarVehiculo.place_forget()
         self.administracion.place_forget()
-        self.label18.place_forget()
+        self.label18.config(image=self.fondoParqueadero)
         self.config(bg="grey10")
 
         # Frames
@@ -66,6 +69,7 @@ class MainFrame(Frame):
         self.placa.place(relx=0.035, rely=0.9)
         self.hora.place(relx=0.2, rely=0.9)
         self.piso.config(width=10)
+        self.piso.bind("<<ComboboxSelected>>", self.selection_changed)
         self.piso.place(relx=0.2, rely=0.176)
 
         # Botones
@@ -156,22 +160,24 @@ class MainFrame(Frame):
         match (self.piso.get()):
             case "Piso 1":
                 self.label17.config(text="Piso 1")
-                self.label17.place(relx=0.66, rely=0.4)
+                self.label17.place(relx=0.66, rely=0.38)
             case "Piso 2":
                 self.label17.config(text="Piso 2")
-                self.label17.place(relx=0.66, rely=0.4)
+                self.label17.place(relx=0.66, rely=0.38)
             case "Piso 3":
                 self.label17.config(text="Piso 3")
-                self.label17.place(relx=0.66, rely=0.4)
+                self.label17.place(relx=0.66, rely=0.38)
 
     def Select(self):
         self.frame3.place(x=0, rely=0.5, relwidth=0.3, relheight=0.15)
         self.label7.place(relx=0.066, rely=0.5)
+        self.label18.config(image=self.fondoParqueadero)
+        self.label18.place(x=0, y=0)
         self.piso.config(width=20)
         self.piso.place(relx=0.09, rely=0.57)
         self.piso.bind("<<ComboboxSelected>>", self.selection_changed)
-        self.label8.place(relx=0.02, rely=0.66)
-        self.label9.place(relx=0.19, rely=0.66)
+        self.label8.place(relx=0.01, rely=0.66)
+        self.label9.place(relx=0.18, rely=0.66)
         self.placa.place(relx=0.022, rely=0.76)
         self.hora.place(relx=0.205, rely=0.76)
         self.label1.place_forget()
@@ -209,13 +215,13 @@ class MainFrame(Frame):
         self.opcion = StringVar()
         self.opcion.set(None)
         Radiobutton(self.frame1, text="Moto", variable=self.opcion, value="moto", command=self.Select,
-                    font=("Freeman", 14), bg="Yellow green", activebackground="Yellow green", foreground="navy").place(
+                    font=("Freeman", 14), bg="#7ED957", activebackground="#7ED957", foreground="navy").place(
             x=5, rely=0.3)
         Radiobutton(self.frame1, text="Carro", variable=self.opcion, value="carro", command=self.Select,
-                    font=("Freeman", 14), bg="Yellow green", activebackground="Yellow green", foreground="navy").place(
+                    font=("Freeman", 14), bg="#7ED957", activebackground="#7ED957", foreground="navy").place(
             x=5, rely=0.3 + 0.05)
         Radiobutton(self.frame1, text="Movilidad Reducida", variable=self.opcion, value="discapacitado",
-                    command=self.Select, font=("Freeman", 14), bg="Yellow green", activebackground="Yellow green",
+                    command=self.Select, font=("Freeman", 14), bg="#7ED957", activebackground="#7ED957",
                     foreground="navy").place(x=5, rely=0.3 + 0.1)
 
         # Labels
@@ -227,41 +233,49 @@ class MainFrame(Frame):
         self.label6.place(relx=0.12, rely=0.16)
         self.agregar.place(relx=0.4, rely=0.8, width=100, height=50)
 
+    def Validacion(self):
+        if self.placa.get(1.0, "end-1c") =="" or self.hora.get(1.0,"end-1c") == "" or self.piso.get()=="" or self.placaBusqueda.get(1.0, "end-1c")=="":
+            messagebox.showerror(title="Advertencia", message="Completar todos los campos")
+        else:
+            self.liquidar.config(command=self.Liquidacion)
+
     def create_widgets(self):
         font = ('Freeman', 38, "bold")
-
+        self.fondo = tk.PhotoImage(file="fondoPrincipal.png")
+        self.fondoParqueadero = tk.PhotoImage(file="parqueadero.png")
+        self.label18 = Label(self.master, image=self.fondo)
+        self.label18.place(x=0, y=0)
         self.agregarVehiculo = customtkinter.CTkButton(self.master, text="Agregar Vehículo",
                                                        font=('Freeman', 40, "bold"), height=100,
-                                                       width=200, text_color="ghostwhite", fg_color="deepskyblue3",
+                                                       width=200, text_color="ghostwhite", fg_color="#13402A",
                                                        hover_color="forestgreen", corner_radius=30, border_width=10,
-                                                       border_color="Coral", command=self.AgregarVehiculo,
-                                                       bg_color="Yellow green")
-        self.agregarVehiculo.place(relx=0.4, rely=0.5)
+                                                       border_color="ghostwhite", command=self.AgregarVehiculo, bg_color="#7ED957")
+        self.agregarVehiculo.place(relx=0.37, rely=0.5)
         self.administracion = customtkinter.CTkButton(self.master, text="Administración", font=('Freeman', 40, "bold"),
                                                       height=100,
-                                                      width=200, text_color="ghostwhite", fg_color="deepskyblue3",
+                                                      width=200, text_color="ghostwhite", fg_color="#13402A",
                                                       hover_color="forestgreen", corner_radius=30, border_width=10,
-                                                      border_color="Coral", command=self.Administracion,
-                                                      bg_color="Yellow green")
-        self.administracion.place(relx=0.41, rely=0.75)
+                                                      border_color="ghostwhite", command=self.Administracion, background_corner_colors=("#7ED957", "#13402A", "#13402A", "#13402A"))
+        self.administracion.place(relx=0.38, rely=0.75)
 
         # Frames
-        self.frame1 = Frame(self.master, bg="Yellow green")
-        self.frame1_1 = Frame(self.master, bg="Yellow green")
-        self.frame2 = Frame(self.frame1, bg="teal")
-        self.frame2_2 = Frame(self.frame1_1, bg="teal")
+        self.frame1 = Frame(self.master, bg="#7ED957")
+        self.frame1_1 = Frame(self.master, bg="#7ED957")
+        self.frame2 = Frame(self.frame1, bg="#13402A")
+        self.frame2_2 = Frame(self.frame1_1, bg="#13402A")
 
         # Creacion de widgets al seleccionar un radiobutton
-        self.frame3 = Frame(self.master, bg="teal")
+        self.frame3 = Frame(self.master, bg="#13402A")
         self.frame4 = Frame(self.master, bg="grey10")
-        self.label7 = Label(self.master, text="Escoga el piso deseado", font=("Freeman", 17), bg="teal",
+        self.label7 = Label(self.master, text="Escoga el piso deseado", font=("Freeman", 17), bg="#13402A",
                             foreground="ghostwhite")
         self.piso = ttk.Combobox(self.master, state="readonly", values=["Piso 1", "Piso 2", "Piso 3"],
                                  font=("Freeman", 10))
-        self.label8 = Label(self.master, text="Ingrese la placa\n del vehiculo", font=("Freeman", 14), bg="teal",
-                            foreground="ghostwhite")
-        self.label9 = Label(self.master, text="Ingrese la hora\n de entrada", font=("Freeman", 14), bg="teal",
-                            foreground="ghostwhite")
+        self.label8 = ctk.CTkLabel(self.master, text="Ingrese la placa\n del vehiculo", font=("Freeman", 20),
+                                   text_color="ghostwhite", fg_color="#13402A", corner_radius=20, bg_color="#7ED957")
+        self.label9 = ctk.CTkLabel(self.master, text="Ingrese la hora\n de entrada", font=("Freeman", 20),
+                                   bg_color="#7ED957",
+                                   text_color="ghostwhite", fg_color="#13402A", corner_radius=20)
         self.placa = Text(self.master, width=15, height=1)
         self.placaBusqueda = Text(self.master, width=15, height=1)
         self.hora = Text(self.master, width=10, height=1)
@@ -273,33 +287,33 @@ class MainFrame(Frame):
                             foreground="ghostwhite")
         self.label4 = Label(self.master, text="3. Escoja su lugar deseado.", font=font, bg="grey10",
                             foreground="ghostwhite")
-        self.label5 = Label(self.frame2, text="PARKEASE", font=font, bg="teal", foreground="ghostwhite")
-        self.label5_5 = Label(self.frame2_2, text="PARKEASE", font=font, bg="teal", foreground="ghostwhite")
-        self.label6 = Label(self.frame1, text="Ingrese el tipo de parqueadero\na escoger",
-                            font=("Freeman", 17), bg="teal", foreground="ghostwhite")
-        self.label10 = Label(self.frame1_1, text="Escoga el piso deseado", font=("Freeman", 17), bg="teal",
+        self.label5 = Label(self.frame2, text="PARKEASE", font=font, bg="#13402A", foreground="ghostwhite")
+        self.label5_5 = Label(self.frame2_2, text="PARKEASE", font=font, bg="#13402A", foreground="ghostwhite")
+        self.label6 = ctk.CTkLabel(self.frame1, text="Ingrese el tipo de parqueadero\na escoger",
+                                   font=("Freeman", 20), text_color="ghostwhite", width=90, height=70, corner_radius=20,
+                                   fg_color="#13402A")
+        self.label10 = Label(self.frame1_1, text="Escoga el piso deseado", font=("Freeman", 17), bg="#13402A",
                              foreground="ghostwhite")
-        self.label11 = Label(self.frame1_1, text="Buscar por\n placa", font=("Freeman", 14), bg="teal",
+        self.label11 = Label(self.frame1_1, text="Buscar por\n placa", font=("Freeman", 14), bg="#13402A",
                              foreground="ghostwhite")
-        self.label13 = Label(self.frame1_1, text="Liquidación del vehiculo", font=("Freeman", 17), bg="teal",
+        self.label13 = Label(self.frame1_1, text="Liquidación del vehiculo", font=("Freeman", 17), bg="#13402A",
                              foreground="ghostwhite")
-        self.label14 = Label(self.frame1_1, text="Ingresar placa del vehiculo y hora de salida", bg="teal",
+        self.label14 = Label(self.frame1_1, text="Ingresar placa del vehiculo y hora de salida", bg="#13402A",
                              foreground="ghostwhite",
                              font=("Freeman", 12))
-        self.label15 = Label(self.frame1_1, text="Placa", font=("Freeman", 16), bg="Yellow green", foreground="navy")
-        self.label16 = Label(self.frame1_1, text="Hora", font=("Freeman", 16), bg="Yellow green", foreground="navy")
+        self.label15 = Label(self.frame1_1, text="Placa", font=("Freeman", 16), bg="#7ED957", foreground="navy")
+        self.label16 = Label(self.frame1_1, text="Hora", font=("Freeman", 16), bg="#7ED957", foreground="navy")
         self.label17 = Label(self.master, font=("Freeman", 30), bg="grey10", foreground="ghostwhite")
-        self.label18 = Label(self.master, text="PARKEASE", font=("Freeman", 40), bg="teal", foreground="ghostwhite", borderwidth=10, relief="ridge")
-        self.label18.place(relx= 0.44, rely=0.1)
+
 
         # Botones
         self.agregar = Button(self.frame1, text="Agregar", bg="green", activebackground="red",
-                              font=("Freeman", 16))
+                              font=("Freeman", 16), command= self.Validacion)
         self.buscar = Button(self.frame1_1, text="Buscar", bg="green", activebackground="red",
-                             font=("Freeman", 10))
+                             font=("Freeman", 10), command=self.Validacion)
         self.liquidar = Button(self.frame1_1, text="Ok", bg="green", activebackground="red",
                                font=("Freeman", 10),
-                               command=self.Liquidacion)
+                               command= self.Validacion)
         self.volver = Button(self.master, text="Volver", bg="green", activebackground="red",
                              font=("Freeman", 10),
                              command=self.Volver)

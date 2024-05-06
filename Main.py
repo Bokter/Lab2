@@ -1,6 +1,7 @@
 from Ventana import MainFrame
 from tkinter import Tk
 
+
 def main():
     root = Tk()
     root.wm_title("ParkEase")
@@ -10,5 +11,8 @@ def main():
     app = MainFrame(root)
     app.mainloop()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
+
+
