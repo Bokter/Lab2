@@ -13,12 +13,15 @@ class MainFrame(Frame):
         self.config(bg="Yellow green")
         self.create_widgets()
 
+        self.slot = ""
+        self.listAux = []
+
     def Volver(self):
         self.label18.config(image=self.fondo)
         self.label18.place(x=0, y=0)
         self.config(bg="Yellow green")
-        self.agregarVehiculo.place(relx=0.37, rely=0.5)
-        self.administracion.place(relx=0.38, rely=0.75)
+        self.agregarVehiculo.place(relx=0.2, rely=0.5)
+        self.administracion.place(relx=0.55, rely=0.5)
         self.OcultarBloques()
         self.frame1.place_forget()
         self.frame1_1.place_forget()
@@ -41,12 +44,17 @@ class MainFrame(Frame):
         self.list.place_forget()
         self.scrollbar.place_forget()
         self.label17.place_forget()
+        self.label19.place_forget()
+        self.label20.place_forget()
         self.volver.place_forget()
 
     def Liquidacion(self):
         messagebox.showinfo(title="Liquidación", message="Monto a pagar\n si")
 
     def Administracion(self):
+
+        self.val = 2
+
         self.agregarVehiculo.place_forget()
         self.administracion.place_forget()
         self.label18.config(image=self.fondoParqueadero)
@@ -82,8 +90,6 @@ class MainFrame(Frame):
         self.label12.place(relx=0.015, rely=0.38)
         self.list.place(x=2, y=2)
         self.scrollbar.pack(side=RIGHT)
-        self.list.insert(0, self.titulos_lista)
-        self.list.insert(1, *self.listaVehiculos)
 
     def OcultarBloques(self):
         # Motos
@@ -157,24 +163,49 @@ class MainFrame(Frame):
         self.bloqueA.place(relx=0.35, y=5, width=140, height=220)
 
     def selection_changed(self, event):
+        from Main import Piso_1
+        from Main import Piso_2
+        from Main import Piso_3
+
+        print(self.list.size())
+
         match (self.piso.get()):
             case "Piso 1":
                 self.label17.config(text="Piso 1")
                 self.label17.place(relx=0.66, rely=0.38)
+
+                self.list.delete(1, tk.END)
+
+                for i in Piso_1.vehicles:
+                    self.list.insert(END, f"{i.getPlate()}      -       {i.getSlot()}       -       {i.getTime()}     -       {i.getVType()}")
+
             case "Piso 2":
                 self.label17.config(text="Piso 2")
                 self.label17.place(relx=0.66, rely=0.38)
+
+                self.list.delete(1, tk.END)
+
+                for i in Piso_2.vehicles:
+                    self.list.insert(END, f"{i.getPlate()}      -       {i.getSlot()}       -       {i.getTime()}     -       {i.getVType()}")
+
             case "Piso 3":
                 self.label17.config(text="Piso 3")
                 self.label17.place(relx=0.66, rely=0.38)
 
+                self.list.delete(1, tk.END)
+
+                for i in Piso_3.vehicles:
+                    self.list.insert(END, f"{i.getPlate()}      -       {i.getSlot()}       -       {i.getTime()}     -       {i.getVType()}")
+
     def Select(self):
         self.frame3.place(x=0, rely=0.5, relwidth=0.3, relheight=0.15)
-        self.label7.place(relx=0.066, rely=0.5)
+        self.label7.place(relx=0.011, rely=0.505)
+        self.label19.place(relx=0.2, rely=0.505)
+        self.label20.place(relx=0.22, rely=0.585)
         self.label18.config(image=self.fondoParqueadero)
         self.label18.place(x=0, y=0)
-        self.piso.config(width=20)
-        self.piso.place(relx=0.09, rely=0.57)
+        self.piso.config(width=10)
+        self.piso.place(relx=0.03, rely=0.555)
         self.piso.bind("<<ComboboxSelected>>", self.selection_changed)
         self.label8.place(relx=0.01, rely=0.66)
         self.label9.place(relx=0.18, rely=0.66)
@@ -203,6 +234,9 @@ class MainFrame(Frame):
                 self.DisabledMotos()
 
     def AgregarVehiculo(self):
+
+        self.val = 1
+
         self.agregarVehiculo.place_forget()
         self.administracion.place_forget()
         self.label18.place_forget()
@@ -234,13 +268,23 @@ class MainFrame(Frame):
         self.agregar.place(relx=0.4, rely=0.8, width=100, height=50)
 
     def Validacion(self):
-        if self.placa.get(1.0, "end-1c") =="" or self.hora.get(1.0,"end-1c") == "" or self.piso.get()=="" or self.placaBusqueda.get(1.0, "end-1c")=="":
-            messagebox.showerror(title="Advertencia", message="Completar todos los campos")
-        else:
-            self.liquidar.config(command=self.Liquidacion)
+        match self.val:
+            case 1:
+                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "":
+                    messagebox.showerror(title="Advertencia", message="Completar todos los campos")
+                else:
+                    self.addVehicle(self.placa.get(1.0,"end-1c"), self.slot, self.hora.get(1.0,"end-1c"), self.opcion.get())
+            case 2:
+                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "":
+                    messagebox.showerror(title="Advertencia", message="Completar todos los campos")
+                else:
+                    self.Liquidacion()
 
     def create_widgets(self):
         font = ('Freeman', 38, "bold")
+
+        self.val = 0
+
         self.fondo = tk.PhotoImage(file="fondoPrincipal.png")
         self.fondoParqueadero = tk.PhotoImage(file="parqueadero.png")
         self.label18 = Label(self.master, image=self.fondo)
@@ -250,13 +294,17 @@ class MainFrame(Frame):
                                                        width=200, text_color="ghostwhite", fg_color="#13402A",
                                                        hover_color="forestgreen", corner_radius=30, border_width=10,
                                                        border_color="ghostwhite", command=self.AgregarVehiculo, bg_color="#7ED957")
-        self.agregarVehiculo.place(relx=0.37, rely=0.5)
+        self.agregarVehiculo.place(relx=0.20, rely=0.5)
+
         self.administracion = customtkinter.CTkButton(self.master, text="Administración", font=('Freeman', 40, "bold"),
                                                       height=100,
                                                       width=200, text_color="ghostwhite", fg_color="#13402A",
                                                       hover_color="forestgreen", corner_radius=30, border_width=10,
-                                                      border_color="ghostwhite", command=self.Administracion, background_corner_colors=("#7ED957", "#13402A", "#13402A", "#13402A"))
-        self.administracion.place(relx=0.38, rely=0.75)
+                                                      border_color="ghostwhite", command=self.Administracion, bg_color="#7ED957")
+
+        self.administracion.place(relx=0.55, rely=0.5)
+
+
 
         # Frames
         self.frame1 = Frame(self.master, bg="#7ED957")
@@ -267,7 +315,7 @@ class MainFrame(Frame):
         # Creacion de widgets al seleccionar un radiobutton
         self.frame3 = Frame(self.master, bg="#13402A")
         self.frame4 = Frame(self.master, bg="grey10")
-        self.label7 = Label(self.master, text="Escoga el piso deseado", font=("Freeman", 17), bg="#13402A",
+        self.label7 = Label(self.master, text="Seleccione el piso", font=("Freeman", 17), bg="#13402A",
                             foreground="ghostwhite")
         self.piso = ttk.Combobox(self.master, state="readonly", values=["Piso 1", "Piso 2", "Piso 3"],
                                  font=("Freeman", 10))
@@ -276,6 +324,10 @@ class MainFrame(Frame):
         self.label9 = ctk.CTkLabel(self.master, text="Ingrese la hora\n de entrada", font=("Freeman", 20),
                                    bg_color="#7ED957",
                                    text_color="ghostwhite", fg_color="#13402A", corner_radius=20)
+        self.label19 = Label(self.master, text="Parqueadero\nEscogido", font=("Freeman", 14), bg="#13402A",
+                             foreground="ghostwhite")
+        self.label20 = Label(self.master, text=".", font=("Freeman", 14), bg="#13402A",
+                             foreground="ghostwhite")
         self.placa = Text(self.master, width=15, height=1)
         self.placaBusqueda = Text(self.master, width=15, height=1)
         self.hora = Text(self.master, width=10, height=1)
@@ -319,25 +371,75 @@ class MainFrame(Frame):
                              command=self.Volver)
 
         # Bloques de parqueo
-        self.bloqueA = Button(self.master, text="A", bg="green", font=("Freeman", 30))
-        self.bloqueB = Button(self.master, text="B", bg="green", font=("Freeman", 30))
-        self.bloqueC = Button(self.master, text="C", bg="green", font=("Freeman", 30))
-        self.bloqueD = Button(self.master, text="D", bg="green", font=("Freeman", 30))
-        self.bloqueE = Button(self.master, text="E", bg="green", font=("Freeman", 30))
-        self.bloqueF = Button(self.master, text="F", bg="green", font=("Freeman", 30))
-        self.bloqueG = Button(self.master, text="G", bg="green", font=("Freeman", 30))
-        self.bloqueH = Button(self.master, text="H", bg="green", font=("Freeman", 30))
-        self.bloqueI = Button(self.master, text="I", bg="green", font=("Freeman", 30))
-        self.bloqueJ = Button(self.master, text="J", bg="green", font=("Freeman", 30))
-        self.bloqueK = Button(self.master, text="K", bg="green", font=("Freeman", 30))
-        self.bloqueL = Button(self.master, text="L", bg="green", font=("Freeman", 30))
+        self.bloqueA = Button(self.master, text="A", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("A", 0, 10))
+        self.bloqueB = Button(self.master, text="B", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("B", 1, 16))
+        self.bloqueC = Button(self.master, text="C", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("C", 2, 16))
+        self.bloqueD = Button(self.master, text="D", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("D", 3, 16))
+        self.bloqueE = Button(self.master, text="E", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("E", 4, 16))
+        self.bloqueF = Button(self.master, text="F", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("F", 5, 16))
+        self.bloqueG = Button(self.master, text="G", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("G", 6, 20))
+        self.bloqueH = Button(self.master, text="H", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("H", 7, 20))
+        self.bloqueI = Button(self.master, text="I", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("I", 8, 20))
+        self.bloqueJ = Button(self.master, text="J", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("J", 9, 20))
+        self.bloqueK = Button(self.master, text="K", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("K", 10, 20))
+        self.bloqueL = Button(self.master, text="L", bg="green", font=("Freeman", 30),
+                              command=lambda: self.changeLabel("L", 11, 20))
 
         # Lista vehiculos
         self.label12 = LabelFrame(self.master, text="Lista de vehiculos:", width=345, height=240, font=("Freeman", 10))
         self.titulos_lista = ("Placa    -   Lugar    -   Hora de entrada    -   Tipo vehiculo")
-        self.listaVehiculos = (
-            "CFC-223", "WGC-678", "XCV-123", "YTR-456", "VBN-789", "CBA-012", "CAB-345", "DEF-678", "GHI-901",
-            "JKL-123")
+        self.listaVehiculos = []
         self.scrollbar = Scrollbar(self.frame1_1, orient=VERTICAL)
         self.list = Listbox(self.label12, width=47, height=9, yscrollcommand=self.scrollbar.set, font=("Freeman", 10))
         self.scrollbar.config(command=self.list.yview)
+        self.list.insert(0, self.titulos_lista)
+        self.list.insert(1, *self.listaVehiculos)
+
+    def changeLabel(self, block, index, max):
+        from Main import Piso_1
+        from Main import Piso_2
+        from Main import Piso_3
+
+        match self.val:
+            case 1:
+                match (self.piso.get()):
+                    case "Piso 1":
+                        num = Piso_1.current[index]
+
+                        if num + 1 > max - 1:
+                            Piso_1.current[index] = 0
+                        else:
+                            Piso_1.current[index] += 1
+
+                        self.slot = f"P1{block}{num + 1}"
+                        self.label20.config(text=self.slot)
+
+                    case "Piso 2":
+                        num = Piso_2.current[index]
+
+                        if num + 1 > max - 1:
+                            Piso_2.current[index] = 0
+                        else:
+                            Piso_2.current[index] += 1
+
+                        self.slot = f"P2{block}{num + 1}"
+                        self.label20.config(text=self.slot)
+
+                    case "Piso 3":
+                        num = Piso_3.current[index]
+
+                        if num + 1 > max - 1:
+                            Piso_3.current[index] = 0
+                        else:
+                            Piso_3.current[index] += 1
