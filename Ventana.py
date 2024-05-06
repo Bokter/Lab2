@@ -275,7 +275,10 @@ class MainFrame(Frame):
                 else:
                     self.addVehicle(self.placa.get(1.0,"end-1c"), self.slot, self.hora.get(1.0,"end-1c"), self.opcion.get())
             case 2:
-                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "":
+
+
+                if self.placa.get(1.0, "end-1c") == "" or self.hora.get(1.0, "end-1c") == "" or self.piso.get() == "" or self.placaBusqueda.get(1.0, "end-1c") == "":
+
                     messagebox.showerror(title="Advertencia", message="Completar todos los campos")
                 else:
                     self.Liquidacion()
@@ -442,4 +445,70 @@ class MainFrame(Frame):
                         if num + 1 > max - 1:
                             Piso_3.current[index] = 0
                         else:
+
                             Piso_3.current[index] += 1
+
+                            Piso_3.current[index] += 1
+
+                        self.slot = f"P3{block}{num + 1}"
+                        self.label20.config(text=self.slot)
+
+
+            case 2:
+
+
+                pass
+
+    def addVehicle(self, placa, slot, entryTime, VType):
+        from Main import Vehicle
+        from Main import Piso_1
+        from Main import Piso_2
+        from Main import Piso_3
+
+        dp = False
+
+        match VType:
+            case "moto":
+                VType = "M"
+            case "carro":
+                VType = "C"
+            case "discapacitado":
+                VType = "D"
+
+        if ":" in entryTime:
+            a = entryTime.split(":")
+            if int(a[0]) >= 0 and int(a[0]) <= 23 and int(a[1]) >= 0 and int(a[1]) <= 59:
+                dp = True
+
+        if dp and len(placa) == 6:
+
+            v = Vehicle(placa, slot, entryTime, VType)
+
+            match (self.piso.get()):
+                case "Piso 1":
+                    if Piso_1.addVehicle(v):
+                        messagebox.showinfo(title="Agregar Vehiculo", message="Vehiculo añadido exitosamente")
+
+                        self.list.insert(END,f"{placa}        -       {slot}      -       {entryTime}         -       {VType}")
+
+                        self.listaVehiculos.append(f"{placa}        -       {slot}      -       {entryTime}         -       {VType}")
+
+                case "Piso 2":
+                    if Piso_2.addVehicle(v):
+                        messagebox.showinfo(title="Agregar Vehiculo", message="Vehiculo añadido exitosamente")
+                        self.list.insert(END,f"{placa}        -       {slot}      -       {entryTime}         -       {VType}")
+
+                        self.listaVehiculos.append(f"{placa}        -       {slot}      -       {entryTime}         -       {VType}")
+                case "Piso 3":
+                    if Piso_3.addVehicle(v):
+                        messagebox.showinfo(title="Agregar Vehiculo", message="Vehiculo añadido exitosamente")
+
+                        self.list.insert(END,f"{placa}        -       {slot}      -       {entryTime}         -       {VType}")
+
+                        self.listaVehiculos.append(f"{placa}        -       {slot}      -       {entryTime}         -       {VType}")
+
+            print(self.listaVehiculos)
+        else:
+            messagebox.showinfo(title="Datos Invalidos",
+                                message="El vehiculo no se pudo añadir\nRevise sus datos")
+
